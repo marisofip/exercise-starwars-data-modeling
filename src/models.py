@@ -27,6 +27,7 @@ class Personajes(Base):
     edad = Column(Integer, nullable=False)
     nacimiento = Column(String(250), nullable=False)
     altura = Column(Integer, nullable=False)
+    likes_personajes = relationship('Like_personajes', back_populates = 'personajes')
 
 class Planetas(Base):
     __tablename__ = 'planetas'
@@ -36,17 +37,21 @@ class Planetas(Base):
     diametro = Column(Integer, nullable=False)
     terreno = Column(String(250), nullable=False)
     poblacion = Column(Integer, nullable=False)
+    likes_planetas = relationship('Like_planetas', back_populates = 'planetas')
 
 class Likes_Personajes(Base):
     __tablename__ = 'likes_personajes'
     usuario_id = Column(Integer, ForeignKey('usuario.id') , primary_key=True, nullable=False)
     personajes_id = Column(Integer,  ForeignKey('personajes.id'), primary_key=True, nullable=False)
+    usuario = relationship('Usuario', back_populates='likes_personajes')
+    personajes = relationship('Personajes', back_populates = 'likes_personajes')
     
 class Likes_Planetas(Base):
     __tablename__ = 'likes_planetas'
     usuario_id = Column(Integer, ForeignKey('usuario.id'), primary_key=True, nullable=False )
     planetas_id = Column(Integer, ForeignKey('planetas.id'), primary_key=True, nullable=False )
-
+    usuario = relationship('Usuario', back_populates='likes_personajes')
+    planetas = relationship('Planetas', back_populates = 'likes_planetas' )
 
 
     def to_dict(self):
